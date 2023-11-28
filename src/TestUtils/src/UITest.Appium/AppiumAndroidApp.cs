@@ -34,6 +34,9 @@ namespace UITest.Appium
 			//// TODO: Check for installed package first?
 			//AndroidEmulator.InstallPackage(apkPath, pkgName, outDir);
 			var androidApp = new AppiumAndroidApp(remoteAddress, config);
+			var logs = androidApp.Driver.Manage().Logs;
+			Console.WriteLine($"Available log types: {string.Join(", ", logs.AvailableLogTypes)}");
+			logs.GetLog("logcat"); // do nothing with the result and clear the log buffer
 			androidApp.Driver.ActivateApp(pkgName);
 			return androidApp;
 		}
@@ -58,8 +61,8 @@ namespace UITest.Appium
 
 				return Convert.ToInt32(state) switch
 				{
-					0 => ApplicationState.Not_Installed,
-					1 => ApplicationState.Not_Running,
+					0 => ApplicationState.NotInstalled,
+					1 => ApplicationState.NotRunning,
 					3 or
 					4 => ApplicationState.Running,
 					_ => ApplicationState.Unknown,
