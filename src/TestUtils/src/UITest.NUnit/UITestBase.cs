@@ -56,10 +56,10 @@ namespace UITest.Appium.NUnit
 		[TearDown]
 		public void UITestBaseTearDown()
 		{
-			SaveAppLogs();
-
 			if (App.AppState == ApplicationState.NotRunning)
 			{
+				SaveAppLogs();
+
 				Reset();
 				FixtureSetup();
 
@@ -72,6 +72,7 @@ namespace UITest.Appium.NUnit
 			if (testOutcome == ResultState.Error ||
 				testOutcome == ResultState.Failure)
 			{
+				SaveAppLogs();
 				SaveAppSnapshots();
 			}
 		}
@@ -159,6 +160,8 @@ namespace UITest.Appium.NUnit
 				note = "-";
 			else
 				note = $"-{note}-";
+
+			filename = $"{Path.GetFileNameWithoutExtension(filename)}-{Guid.NewGuid().ToString("N")}{Path.GetExtension(filename)}";
 
 			var logDir =
 				Path.GetDirectoryName(Environment.GetEnvironmentVariable("APPIUM_LOG_FILE") ??
